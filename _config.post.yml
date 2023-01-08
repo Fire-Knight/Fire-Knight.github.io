@@ -99,25 +99,25 @@ comment:
     enable_hotkey: true             # 可选填
     language: zh-CN                 # 可选填
 donates:
-    -
-        type: afdian
-        url: ''
+    # -
+    #     type: afdian
+    #     url: ''
     -
         type: alipay
-        qrcode: ''
-    -
-        type: buymeacoffee
-        url: ''
-    -
-        type: patreon
-        url: ''
-    -
-        type: paypal
-        business: ''
-        currency_code: USD
+        qrcode: /img/alipay_pay.png
+    # -
+    #     type: buymeacoffee
+    #     url: ''
+    # -
+    #     type: patreon
+    #     url: ''
+    # -
+    #     type: paypal
+    #     business: ''
+    #     currency_code: USD
     -
         type: wechat
-        qrcode: ''
+        qrcode: /img/wechat_pay.png
 share:
     type: sharethis
     install_url: ''
