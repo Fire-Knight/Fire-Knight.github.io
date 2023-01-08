@@ -83,8 +83,21 @@ search:
     type: insight
     index_pages: true
 comment:
-    type: disqus
-    shortname: ''
+    type: gitalk
+    client_id: 9d590463f9824e731baf
+    client_secret: cd67a9950f548a96891437f8f078e08fe05e8d1a
+    repo: Fire-Knight.github.io
+    owner: Fire-Knight
+    admin:
+        - Fire-Knight
+    per_page: 20                    # 可选填
+    distraction_free_mode: false    # 可选填
+    pager_direction: last           # 可选填
+    create_issue_manually: false    # 可选填
+    proxy:                          # 可选填
+    flip_move_options:              # 可选填
+    enable_hotkey: true             # 可选填
+    language: zh-CN                 # 可选填
 donates:
     -
         type: afdian
