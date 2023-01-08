@@ -16,13 +16,13 @@ head:
                 sizes: ''
                 type: 
     open_graph:
-        title: 
+        title: FireKnight的站点
         type: blog
-        url: 
+        url: https://fire-knight.github.io/
         image: 
-        site_name: 
+        site_name: FireKnight的站点
         author: FireKnight
-        description: 系统开发工程师
+        description: 
         # twitter_card: 
         # twitter_id: 
         # twitter_site: 
