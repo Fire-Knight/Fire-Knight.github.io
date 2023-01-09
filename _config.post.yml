@@ -205,10 +205,10 @@ plugins:
     animejs: true
     back_to_top: true
     baidu_analytics:
-        tracking_id: 
+        tracking_id: 60d5f1eef1e19f809bcb0ff4a406442e
     bing_webmaster:
         tracking_id: 
-    busuanzi: false
+    busuanzi: true
     cnzz:
         id: 
         web_id: 
