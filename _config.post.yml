@@ -1,8 +1,8 @@
 version: 5.1.0
 variant: default
-logo: /img/logo.png
+logo: /img/logo-circle.png
 head:
-    favicon: /img/logo.png
+    favicon: /img/logo-circle.png
     manifest:
         name: FireKnight的小站
         short_name: 

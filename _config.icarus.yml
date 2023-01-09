@@ -1,8 +1,8 @@
 version: 5.1.0
 variant: default
-logo: /img/logo.png
+logo: /img/logo-circle.png
 head:
-    favicon: /img/logo.png
+    favicon: /img/logo-circle.png
     manifest:
         name: FireKnight的小站
         short_name: 
@@ -128,7 +128,7 @@ sidebar:
         sticky: false
 widgets:
 
-    # left
+
     -
         position: left
         type: profile
@@ -155,9 +155,21 @@ widgets:
         #     RSS:
         #         icon: fas fa-rss
         #         url: /
+    
+    -
+        position: right
+        type: recent_posts
+    
     -
         position: left
         type: categories
+    
+    -
+        position: right
+        type: links
+        links:
+            Hexo: https://hexo.io
+            Bulma: https://bulma.io
     
     -
         position: left
@@ -170,23 +182,15 @@ widgets:
         position: left
         type: archives
     
-    # right
     -
-        position: right
+        position: left
         type: toc
         index: true
         collapsed: true
         depth: 3
-    -
-        position: right
-        type: recent_posts
+
     
-    -
-        position: right
-        type: links
-        links:
-            Hexo: https://hexo.io
-            Bulma: https://bulma.io
+
 
 
     # -
