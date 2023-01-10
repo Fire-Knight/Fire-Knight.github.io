@@ -118,9 +118,9 @@ donates:
     -
         type: wechat
         qrcode: /img/wechat_pay.png
-share:
-    type: sharethis
-    install_url: ''
+# share:
+#     type: sharethis
+#     install_url: ''
 sidebar:
     left:
         sticky: false

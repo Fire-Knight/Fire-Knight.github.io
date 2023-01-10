@@ -118,9 +118,9 @@ donates:
     -
         type: wechat
         qrcode: /img/wechat_pay.png
-share:
-    type: sharethis
-    install_url: ''
+# share:
+#     type: sharethis
+#     install_url: ''
 sidebar:
     left:
         sticky: false
@@ -205,7 +205,7 @@ plugins:
     animejs: true
     back_to_top: true
     baidu_analytics:
-        tracking_id: 60d5f1eef1e19f809bcb0ff4a406442e
+        tracking_id: b07854b0ea8131112fa25a15e6328af7
     bing_webmaster:
         tracking_id: 
     busuanzi: true
