@@ -2,12 +2,15 @@
 title: CSUR22-Survey
 date: 2023-01-09 17:08:14
 toc: true
+updated: 2023-01-10 10:30:14
 tags: 
 - 微服务
 - 性能分析
 categories:
 - 论文阅读
 - 微服务性能分析
+cover: /image/CSUR22-Survey-cover.jpg
+thumbnail: /image/CSUR22-Survey-cover.jpg
 ---
 
 
@@ -51,6 +54,7 @@ categories:
 # 异常检测
 
 * ![](image-20220510160329-nk6yhpe.png)
+<!-- {% asset_img tmp.jpg 这是一张图片 %} -->
 
 ## 基于log的异常检测
 

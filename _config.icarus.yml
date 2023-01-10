@@ -168,8 +168,7 @@ widgets:
         position: right
         type: links
         links:
-            Hexo: https://hexo.io
-            Bulma: https://bulma.io
+            AAA: A.example.com
     
     -
         position: left
@@ -242,5 +241,5 @@ plugins:
         pixel_id: 
 providers:
     cdn: jsdelivr
-    fontcdn: google
+    fontcdn: fontim
     iconcdn: fontawesome
