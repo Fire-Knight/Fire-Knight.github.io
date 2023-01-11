@@ -1,5 +1,5 @@
 ---
-title: CSUR22-Survey
+title: CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey
 date: 2023-01-09 17:08:14
 toc: true
 updated: 2023-01-10 10:30:14
@@ -7,10 +7,10 @@ tags:
 - 微服务
 - 性能分析
 categories:
-- 论文阅读
+- 论文笔记
 - 微服务性能分析
-cover: /image/CSUR22-Survey-cover.jpg
-thumbnail: /image/CSUR22-Survey-cover.jpg
+cover: /images/CSUR22-Survey-cover.jpg
+# thumbnail: /images/CSUR22-Survey-cover.jpg
 ---
 
 
