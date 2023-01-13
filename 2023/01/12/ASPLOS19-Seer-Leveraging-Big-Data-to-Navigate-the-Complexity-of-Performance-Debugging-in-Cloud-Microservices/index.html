@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>ASPLOS19 - Seer Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices - FireKnight的站点</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="FireKnight的小站"><meta name="msapplication-TileImage" content="/img/logo-circle.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FireKnight的小站"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="深度神经网络预测QoS违规从而实现QoS维稳"><meta property="og:type" content="blog"><meta property="og:title" content="FireKnight的站点"><meta property="og:url" content="https://fire-knight.github.io/"><meta property="og:site_name" content="FireKnight的站点"><meta property="og:description" content="深度神经网络预测QoS违规从而实现QoS维稳"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20230112152444-ux6m8zs.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026145546-62s4p0c.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150105-usoxovi.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150534-g91tm20.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026151831-kxnkyh4.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026152354-ans09zo.png"><meta property="article:published_time" content="2023-01-12T14:35:30.000Z"><meta property="article:modified_time" content="2023-01-12T14:35:30.000Z"><meta property="article:author" content="FireKnight"><meta property="article:tag" content="微服务"><meta property="article:tag" content="智能运维"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fire-knight.github.io/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20230112152444-ux6m8zs.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/"},"headline":"ASPLOS19 - Seer Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices","image":["https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20230112152444-ux6m8zs.png","https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026145546-62s4p0c.png","https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150105-usoxovi.png","https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150534-g91tm20.png","https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026151831-kxnkyh4.png","https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026152354-ans09zo.png"],"datePublished":"2023-01-12T14:35:30.000Z","dateModified":"2023-01-12T14:35:30.000Z","author":{"@type":"Person","name":"FireKnight"},"publisher":{"@type":"Organization","name":"FireKnight的站点","logo":{"@type":"ImageObject","url":"https://www.fireknight.tech/img/logo-circle.png"}},"description":"深度神经网络预测QoS违规从而实现QoS维稳"}</script><link rel="canonical" href="https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/"><link rel="icon" href="/img/logo-circle.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b07854b0ea8131112fa25a15e6328af7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Fire-Knight"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-12T14:35:30.000Z" title="1/12/2023, 2:35:30 PM">2023-01-12</time>发表</span><span class="level-item"><time dateTime="2023-01-12T14:35:30.000Z" title="1/12/2023, 2:35:30 PM">2023-01-12</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">微服务智能运维</a></span><span class="level-item">4 分钟读完 (大约651个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">ASPLOS19 - Seer Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices</h1><div class="content"><ul>
+<li>浅看了一下论文，参照中文翻译以及<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68249146">https://zhuanlan.zhihu.com/p/68249146</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>主要研究领域是QoS维稳。切入方向是QoS的提取预测，以此给出伸缩扩容的建议。</p>
+</li>
+<li><p>做法：提出Seer方法，通过深度学习模型预测可能出现的QoS异常。主要通过对各种队列的分析，发现潜在的QoS异常。</p>
+<ul>
+<li>Seer使用带有QoS违规标注并随时间收集的执行轨迹来训练一个 深度神经网络，以提示即将到来的QoS违规</li>
+</ul>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>没说明各种队列是怎么映射到神经网络中的，以及训练数据中标注的情况。</li>
+<li>队列中的数据通常为多个不同服务的请求，也没说这种关系如何在神经网络中表示</li>
+</ul>
+</li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li><p>系统很复杂</p>
+<ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20230112152444-ux6m8zs.png"></li>
+<li>(这个图真是烂大街了，是个做微服务的都能用(狗头))</li>
+</ul>
+</li>
+<li><p>过去的方法检测QOS异常具有滞后性</p>
+<ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026145546-62s4p0c.png"></li>
+<li>50s处发现异常，采取措施，直到恢复，需要180s左右。</li>
+<li>所以希望提出一种方法，提前预测异常的发生</li>
+</ul>
+</li>
+<li><p>过去的通过资源使用率预测QoS是不准确的，有可能资源利用率一直高，比较难发现异常</p>
+<ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150105-usoxovi.png"></li>
+<li>图二为延迟率，颜色越亮，延迟越高。从上到下为后端到前端。可以看到，后端在0s发生延时，随着时间的推移，在250s，前端感受到延时</li>
+<li>图一位资源利用率(CPU)，颜色越亮，资源利用率越高。可以看到前端一直很高，无法通过资源利用率分析QoS</li>
+</ul>
+</li>
+</ul>
+<h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026150534-g91tm20.png"></li>
+</ul>
+<h2 id="数据来源"><a href="#数据来源" class="headerlink" title="数据来源"></a>数据来源</h2><ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026151831-kxnkyh4.png"></li>
+<li>NIC(network interface controller)过程中的队列，TCP&#x2F;IP数据传输、epoll处理、socket读、内存过程，以及应用层的队列</li>
+</ul>
+<h2 id="框架设计"><a href="#框架设计" class="headerlink" title="框架设计"></a>框架设计</h2><ul>
+<li><img src="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/image-20221026152354-ans09zo.png"></li>
+<li>输入：队列信息、每个神经元对应一个微服务、从上到下分别为后端到前端</li>
+<li>输出：每个结果代表一个微服务发送QoS异常的概率</li>
+</ul>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><ul>
+<li>作者比较了使用不同网络情况下的预测效果，只使用日志、使用底层队列信息等。</li>
+<li>Seer has now been deployed in the Social Network cluster for over two months, and in this time it has detected 536 upcoming QoS violations (90.6% accuracy) and avoided 495 (84%) of them.</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>ASPLOS19 - Seer Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices</p><p><a href="https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/">https://www.fireknight.tech/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>FireKnight</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">智能运维</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay_pay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechat_pay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">ICSE22-DeepTraLog: Trace-Log Combined Microservice AnomalyDetection through Graph-based Deep Learning</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/01/11/NSDI19-Zeno-Zeno-Diagnosing-Performance-Problems-with-Temporal-Provenance/"><span class="level-item">NSDI19 - Zeno - Zeno Diagnosing Performance Problems with Temporal Provenance</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "bdf2f977ebb28171fc4259f22a1522b6",
+            repo: "Fire-Knight.github.io",
+            owner: "Fire-Knight",
+            clientID: "9d590463f9824e731baf",
+            clientSecret: "cd67a9950f548a96891437f8f078e08fe05e8d1a",
+            admin: ["Fire-Knight"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/logo.png" alt="FireKnight"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">FireKnight</p><p class="is-size-6 is-block">系统开发工程师</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">28</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">14</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Fire-Knight" target="_blank" rel="noopener"><i class="fab fa-github"></i>    关注我</a></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Fuzzing/"><span class="tag">Fuzzing</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Istio/"><span class="tag">Istio</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Profiling/"><span class="tag">Profiling</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/REST-API/"><span class="tag">REST API</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Serverless/"><span class="tag">Serverless</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/"><span class="tag">云原生</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><span class="tag">可观测性</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="tag">微服务</span><span class="tag">24</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><span class="tag">性能分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%85%E9%9A%9C%E5%88%86%E6%9E%90/"><span class="tag">故障分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/"><span class="tag">智能运维</span><span class="tag">19</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95/"><span class="tag">测试</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90/"><span class="tag">测试生成</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">1</span><span class="level-item">总结</span></span></a></li><li><a class="level is-mobile" href="#背景"><span class="level-left"><span class="level-item">2</span><span class="level-item">背景</span></span></a></li><li><a class="level is-mobile" href="#系统架构"><span class="level-left"><span class="level-item">3</span><span class="level-item">系统架构</span></span></a></li><li><a class="level is-mobile" href="#数据来源"><span class="level-left"><span class="level-item">4</span><span class="level-item">数据来源</span></span></a></li><li><a class="level is-mobile" href="#框架设计"><span class="level-left"><span class="level-item">5</span><span class="level-item">框架设计</span></span></a></li><li><a class="level is-mobile" href="#实验"><span class="level-left"><span class="level-item">6</span><span class="level-item">实验</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a><p class="is-size-7"><span>&copy; 2023 FireKnight</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

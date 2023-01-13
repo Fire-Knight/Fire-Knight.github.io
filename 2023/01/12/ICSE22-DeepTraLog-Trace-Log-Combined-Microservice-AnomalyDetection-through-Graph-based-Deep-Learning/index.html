@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>ICSE22-DeepTraLog: Trace-Log Combined Microservice AnomalyDetection through Graph-based Deep Learning - FireKnight的站点</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="FireKnight的小站"><meta name="msapplication-TileImage" content="/img/logo-circle.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FireKnight的小站"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="结合log和trace的混合服务异常检测方法：基于图深度学习，不需要预训练模型，线上分类检测异常。可以说是目前微服务智能运维内分析最全面效果较好的方法。"><meta property="og:type" content="blog"><meta property="og:title" content="FireKnight的站点"><meta property="og:url" content="https://fire-knight.github.io/"><meta property="og:site_name" content="FireKnight的站点"><meta property="og:description" content="结合log和trace的混合服务异常检测方法：基于图深度学习，不需要预训练模型，线上分类检测异常。可以说是目前微服务智能运维内分析最全面效果较好的方法。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518221147-u12x4sj.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518222107-g17dbkh.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223141-m1w9td1.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223334-hppcyt3.png"><meta property="article:published_time" content="2023-01-12T14:48:39.000Z"><meta property="article:modified_time" content="2023-01-12T14:48:39.000Z"><meta property="article:author" content="FireKnight"><meta property="article:tag" content="微服务"><meta property="article:tag" content="智能运维"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fire-knight.github.io/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518221147-u12x4sj.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/"},"headline":"ICSE22-DeepTraLog: Trace-Log Combined Microservice AnomalyDetection through Graph-based Deep Learning","image":["https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518221147-u12x4sj.png","https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518222107-g17dbkh.png","https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223141-m1w9td1.png","https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223334-hppcyt3.png"],"datePublished":"2023-01-12T14:48:39.000Z","dateModified":"2023-01-12T14:48:39.000Z","author":{"@type":"Person","name":"FireKnight"},"publisher":{"@type":"Organization","name":"FireKnight的站点","logo":{"@type":"ImageObject","url":"https://www.fireknight.tech/img/logo-circle.png"}},"description":"结合log和trace的混合服务异常检测方法：基于图深度学习，不需要预训练模型，线上分类检测异常。可以说是目前微服务智能运维内分析最全面效果较好的方法。"}</script><link rel="canonical" href="https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/"><link rel="icon" href="/img/logo-circle.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b07854b0ea8131112fa25a15e6328af7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Fire-Knight"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-12T14:48:39.000Z" title="1/12/2023, 2:48:39 PM">2023-01-12</time>发表</span><span class="level-item"><time dateTime="2023-01-12T14:48:39.000Z" title="1/12/2023, 2:48:39 PM">2023-01-12</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">微服务智能运维</a></span><span class="level-item">8 分钟读完 (大约1202个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">ICSE22-DeepTraLog: Trace-Log Combined Microservice AnomalyDetection through Graph-based Deep Learning</h1><div class="content"><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>提出log和trace的混合服务异常检测方法</p>
+</li>
+<li><p>基于图深度学习，不需要预训练模型，线上分类检测异常</p>
+</li>
+<li><p>解决两个痛点</p>
+<ul>
+<li>基于log的异常检测：现有的日志异常检测方法将日志视为事件序列，无法处理分布在具有复杂交互的大量服务中的微服务日志。（事件只针对于当前服务，没有上下调用关联）</li>
+<li>基于trace的异常检测：忽略了由调用层次结构和并行&#x2F;异步调用带来的复杂的结构。（主要还是对并行请求的处理）</li>
+</ul>
+</li>
+<li><p>提出DeepTraLog: 一种基于深度学习的微服务异常检测方法。DeepTraLog使用统一的图表示来描述跟踪的复杂结构，同时结构中嵌入日志事件。结合trace和log训练GGNNs(基于deep SVDD)模型</p>
+<!-- more --></li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul>
+<li>基于log和基于trace的问题</li>
+<li>介绍DeepTraLog</li>
+</ul>
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><ul>
+<li><p>基于trace的异常检测: 没有处理并行，以及log中的信息</p>
+</li>
+<li><p>基于log的异常检测：使用日志+时间戳为每个节点日志排序，但缺乏调用链组成信息（不认同，带traceId即可）</p>
+</li>
+<li><p>提出DeepTraLog</p>
+<ul>
+<li><p>使用一种统一的图表示，称为跟踪事件图(trace event graph, TEG)，来描述跟踪的复杂结构，以及该结构中嵌入的日志事件。</p>
+</li>
+<li><p>它以轨迹和日志作为输入，训练基于图的深度学习模型用于轨迹异常检测</p>
+</li>
+<li><p>过程</p>
+<ul>
+<li>首先，它解析输入跟踪和日志，并分别从中提span关系和日志事件。</li>
+<li>其次，它为span事件和log事件生成向量表示，同时为每个trace构造一个TEG。</li>
+<li>第三，它训练一个门控图神经网络(ggnn)基于深度SVDD(支持向量数据描述)模型，学习每个TEG的潜在表示和最小化的数据封闭超球。</li>
+<li>当用于异常检测时，DeepTraLog以类似的方式分析跟踪和相关日志，并使用训练过的模型生成跟踪的潜在表示。然后，它根据其异常分数(即从迹的潜在表示到超球的最短距离)确定迹是否异常。</li>
+</ul>
+</li>
+<li><p>注意：不依赖于标签，实时训练</p>
+</li>
+</ul>
+</li>
+<li><p>贡献：</p>
+<ul>
+<li>一个统一的结合trace和log的图表示</li>
+<li>一个基于deep SVDD的GGNNS模型用来异常检测</li>
+</ul>
+</li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li><p>日志：日志消息是一个非结构化的句子，它包含一个固定的部分。注意：有固定的结构</p>
+<ul>
+<li><img src="/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518221147-u12x4sj.png"></li>
+</ul>
+</li>
+<li><p>motivation</p>
+<ul>
+<li>log问题（同上）</li>
+<li>trace问题（同上）</li>
+</ul>
+</li>
+</ul>
+<h2 id="APPROACH"><a href="#APPROACH" class="headerlink" title="APPROACH"></a>APPROACH</h2><ol>
+<li><p>Log Parsin：log日志转化为事件</p>
+<ul>
+<li>日志解析，日志中附加traceID和spanID</li>
+<li>使用Drain算法(在线日志解析，讲原本结构转化为目标结构</li>
+</ul>
+</li>
+<li><p>Trace Parsing：trace解析为span，同时解析为同步和异步</p>
+<ul>
+<li>同步：clent&#x2F;server</li>
+<li>异步：生产者&#x2F;消费者</li>
+<li>一个span，涉及父span的调用、接收。子span的调用接收，共四个事件</li>
+</ul>
+</li>
+<li><p>Event Embedding：事件嵌入</p>
+<ol>
+<li><p>log日志预处理，删除动词、单复数变幻</p>
+</li>
+<li><p>词向量化为, 每个词生成300维的向量(已有算法)</p>
+</li>
+<li><p>句子向量化, 为每个词生成权重。句子被向量化为权重的和，再归一化</p>
+<p> <img src="/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518222107-g17dbkh.png"></p>
+</li>
+</ol>
+<p> 类似的操作向量化span事件</p>
+</li>
+<li><p>Graph Construction：图构建</p>
+<ul>
+<li>事件关系：同步请求、同步响应、异步请求</li>
+</ul>
+<ol>
+<li>日志事件连接。对于span的每个范围，获取属于该范围的所有日志事件。然后，根据时间戳对日志事件进行排序，并将每个日志事件的序列关系添加到与其相邻的日志事件(时间关系，非并行关系)</li>
+<li>log日志并入span event</li>
+<li>关系处理：client的request和response的request添加同步关系</li>
+</ol>
+<p> <img src="/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223141-m1w9td1.png"></p>
+</li>
+<li><p>Model Training: 一分类问题</p>
+<ul>
+<li>深度SVDD通过包含数据潜在表示的最小化超球来学习训练数据的有用特征表示。因此，远离超球中心的数据可以被认为是反常的。</li>
+<li>因此，我们使用门控图神经网络(ggnn)学习跟踪表示，并使用深度奇异值映射(SVDD)联合训练ggnn。</li>
+<li>损失函数：最小化超球来包含TEGs的向量</li>
+</ul>
+</li>
+<li><p>Anomaly Detection: 异常检测</p>
+<ul>
+<li>异常分数定义为TEG的潜表示到被学习的超球的最短距离</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/image-20220518223334-hppcyt3.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>ICSE22-DeepTraLog: Trace-Log Combined Microservice AnomalyDetection through Graph-based Deep Learning</p><p><a href="https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/">https://www.fireknight.tech/2023/01/12/ICSE22-DeepTraLog-Trace-Log-Combined-Microservice-AnomalyDetection-through-Graph-based-Deep-Learning/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>FireKnight</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">智能运维</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay_pay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechat_pay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/01/12/ISSTA15-GA-Prof-Automating-Performance-Bottleneck-Detection-usingSearch-Based-Application-Profiling/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">ISSTA15 - GA-Prof - Automating Performance Bottleneck Detection usingSearch-Based Application Profiling</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/01/12/ASPLOS19-Seer-Leveraging-Big-Data-to-Navigate-the-Complexity-of-Performance-Debugging-in-Cloud-Microservices/"><span class="level-item">ASPLOS19 - Seer Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "6d9d83ed7b8c550f7ca1ef3b5dd2b771",
+            repo: "Fire-Knight.github.io",
+            owner: "Fire-Knight",
+            clientID: "9d590463f9824e731baf",
+            clientSecret: "cd67a9950f548a96891437f8f078e08fe05e8d1a",
+            admin: ["Fire-Knight"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/logo.png" alt="FireKnight"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">FireKnight</p><p class="is-size-6 is-block">系统开发工程师</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">28</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">14</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Fire-Knight" target="_blank" rel="noopener"><i class="fab fa-github"></i>    关注我</a></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Fuzzing/"><span class="tag">Fuzzing</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Istio/"><span class="tag">Istio</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Profiling/"><span class="tag">Profiling</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/REST-API/"><span class="tag">REST API</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Serverless/"><span class="tag">Serverless</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/"><span class="tag">云原生</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><span class="tag">可观测性</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="tag">微服务</span><span class="tag">24</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><span class="tag">性能分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%85%E9%9A%9C%E5%88%86%E6%9E%90/"><span class="tag">故障分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/"><span class="tag">智能运维</span><span class="tag">19</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95/"><span class="tag">测试</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90/"><span class="tag">测试生成</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">1</span><span class="level-item">总结</span></span></a></li><li><a class="level is-mobile" href="#摘要"><span class="level-left"><span class="level-item">2</span><span class="level-item">摘要</span></span></a></li><li><a class="level is-mobile" href="#Intro"><span class="level-left"><span class="level-item">3</span><span class="level-item">Intro</span></span></a></li><li><a class="level is-mobile" href="#背景"><span class="level-left"><span class="level-item">4</span><span class="level-item">背景</span></span></a></li><li><a class="level is-mobile" href="#APPROACH"><span class="level-left"><span class="level-item">5</span><span class="level-item">APPROACH</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a><p class="is-size-7"><span>&copy; 2023 FireKnight</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

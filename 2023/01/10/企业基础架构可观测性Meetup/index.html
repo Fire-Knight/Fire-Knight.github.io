@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>企业基础架构可观测性Meetup - FireKnight的站点</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="FireKnight的小站"><meta name="msapplication-TileImage" content="/img/logo-circle.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FireKnight的小站"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="关于基础架构可观测性的一次企业技术分享，DataFun和字节主持，报告还有阿里、网易数帆、EBay、PingCAP。有几个技术分析不错，贴近现实，直观了解企业遇到的问题、解决方案及进展"><meta property="og:type" content="blog"><meta property="og:title" content="FireKnight的站点"><meta property="og:url" content="https://fire-knight.github.io/"><meta property="og:site_name" content="FireKnight的站点"><meta property="og:description" content="关于基础架构可观测性的一次企业技术分享，DataFun和字节主持，报告还有阿里、网易数帆、EBay、PingCAP。有几个技术分析不错，贴近现实，直观了解企业遇到的问题、解决方案及进展"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211127140821-20211127140836-il3qvk3.jpg"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127145345-6hdyq75.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127150551-wr30ea9.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151707-am0c46w.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151926-ok2qz6c.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152136-8fb7gwj.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152310-da06nlv.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152623-xrijof8.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152650-y8vfzih.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152836-peny5zf.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127153058-6tam77c.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154135-eekp1dr.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154450-uaedn2r.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154657-7c2eyh2.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155033-d6gzxx4.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155211-k73knkw.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155503-6933a4b.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155738-rj2lrwm.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160045-c5tulmo.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160118-z3zk6pe.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160359-hdjcakf.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160534-5a9iaot.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160811-7eual9a.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127161144-0ti2pqb.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162004-lgf1447.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162525-po0nv5n.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162605-i77cg20.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162702-yb6je32.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162826-hvezadg.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162916-zttheal.png"><meta property="og:image" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127163757-ymcvrmx.png"><meta property="article:published_time" content="2023-01-10T17:09:45.000Z"><meta property="article:modified_time" content="2023-01-10T17:09:45.000Z"><meta property="article:author" content="FireKnight"><meta property="article:tag" content="微服务"><meta property="article:tag" content="可观测性"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fire-knight.github.io/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211127140821-20211127140836-il3qvk3.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/"},"headline":"企业基础架构可观测性Meetup","image":["https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211127140821-20211127140836-il3qvk3.jpg","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127145345-6hdyq75.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127150551-wr30ea9.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151707-am0c46w.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151926-ok2qz6c.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152136-8fb7gwj.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152310-da06nlv.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152623-xrijof8.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152650-y8vfzih.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152836-peny5zf.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127153058-6tam77c.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154135-eekp1dr.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154450-uaedn2r.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154657-7c2eyh2.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155033-d6gzxx4.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155211-k73knkw.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155503-6933a4b.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155738-rj2lrwm.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160045-c5tulmo.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160118-z3zk6pe.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160359-hdjcakf.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160534-5a9iaot.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160811-7eual9a.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127161144-0ti2pqb.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162004-lgf1447.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162525-po0nv5n.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162605-i77cg20.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162702-yb6je32.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162826-hvezadg.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162916-zttheal.png","https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127163757-ymcvrmx.png"],"datePublished":"2023-01-10T17:09:45.000Z","dateModified":"2023-01-10T17:09:45.000Z","author":{"@type":"Person","name":"FireKnight"},"publisher":{"@type":"Organization","name":"FireKnight的站点","logo":{"@type":"ImageObject","url":"https://www.fireknight.tech/img/logo-circle.png"}},"description":"关于基础架构可观测性的一次企业技术分享，DataFun和字节主持，报告还有阿里、网易数帆、EBay、PingCAP。有几个技术分析不错，贴近现实，直观了解企业遇到的问题、解决方案及进展"}</script><link rel="canonical" href="https://www.fireknight.tech/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/"><link rel="icon" href="/img/logo-circle.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b07854b0ea8131112fa25a15e6328af7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Fire-Knight"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-10T17:09:45.000Z" title="1/10/2023, 5:09:45 PM">2023-01-10</time>发表</span><span class="level-item"><time dateTime="2023-01-10T17:09:45.000Z" title="1/10/2023, 5:09:45 PM">2023-01-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E4%BC%9A%E8%AE%AE%E7%BA%AA%E8%A6%81/">会议纪要</a></span><span class="level-item">6 分钟读完 (大约888个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">企业基础架构可观测性Meetup</h1><div class="content"><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211127140821-20211127140836-il3qvk3.jpg"></li>
+</ul>
+<h2 id="从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件"><a href="#从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件" class="headerlink" title="从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件"></a>从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件</h2><ul>
+<li><p>如何设计出好用的基础软件</p>
+</li>
+<li><p>可交互性</p>
+</li>
+<li><p>控制器</p>
+<ul>
+<li>一个电视机一个控制器</li>
+</ul>
+</li>
+<li><p>文档</p>
+<ul>
+<li>quickstart</li>
+<li>下一步的交互界面引导</li>
+</ul>
+</li>
+<li><p>可交互性</p>
+<ul>
+<li><p>多想一步，告诉用户半步，让用户自己走下半部</p>
+</li>
+<li><p>反馈</p>
+</li>
+<li><p>不要暴露内部概念!不要暴露内部概念</p>
+</li>
+<li><p>用精简的人话暴露进展和状态</p>
+</li>
+<li><p>不要说废话，更不要不说反馈必须即时</p>
+</li>
+<li><p>配置</p>
+</li>
+</ul>
+</li>
+<li><p>可观测性</p>
+</li>
+<li><p>直觉</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127145345-6hdyq75.png"></li>
+</ul>
+</li>
+</ul>
+<h2 id="分布式链路追踪在字节跳动的实践"><a href="#分布式链路追踪在字节跳动的实践" class="headerlink" title="分布式链路追踪在字节跳动的实践"></a><strong>分布式链路追踪在字节跳动的实践</strong></h2><ul>
+<li><p>metric&#x2F;log&#x2F;trace</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127150551-wr30ea9.png"></p>
+</li>
+<li><p>trace：metric和log关联的纽带</p>
+</li>
+<li><p>实现</p>
+</li>
+<li><p>trace等定义类似CNCF opentracing</p>
+</li>
+<li><p>关联关系</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151707-am0c46w.png"></li>
+</ul>
+</li>
+<li><p>埋点：</p>
+<ul>
+<li>日志基础库</li>
+</ul>
+</li>
+<li><p>采样</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127151926-ok2qz6c.png"></li>
+</ul>
+</li>
+<li><p>PostTrace后置采样</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152136-8fb7gwj.png"></li>
+<li>个人理解就是记录下来，相关的trace都会被涉及到</li>
+<li>一种是通过消息分析</li>
+<li>一种是通过log记录下来，然后总结log，分析出trace（后置采样）</li>
+</ul>
+</li>
+<li><p>整体架构</p>
+<ul>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152310-da06nlv.png"></p>
+</li>
+<li><p>私有数据流：只解码部分需要的header</p>
+</li>
+</ul>
+</li>
+<li><p>容灾时的高可用，这种情况下追踪更需要‘</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152623-xrijof8.png"></li>
+</ul>
+</li>
+<li><p>分析计算</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152650-y8vfzih.png"></li>
+</ul>
+</li>
+<li><p>效果</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127152836-peny5zf.png"></li>
+</ul>
+</li>
+<li><p>实践</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127153058-6tam77c.png"></p>
+</li>
+<li><p>错误追踪&#x2F;错误传播链分析</p>
+</li>
+<li><p>一些思路</p>
+</li>
+<li><p>除了系统内数据，还有网络、CPU调用的数据</p>
+</li>
+</ul>
+<h2 id="阿里十年链路追踪与应用可观测实践"><a href="#阿里十年链路追踪与应用可观测实践" class="headerlink" title="阿里十年链路追踪与应用可观测实践"></a><strong>阿里十年链路追踪与应用可观测实践</strong></h2><ul>
+<li><p>更多相关落地实践遇到的问题</p>
+</li>
+<li><p>架构推演</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154135-eekp1dr.png"></p>
+</li>
+<li><p>挑战</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154450-uaedn2r.png"></p>
+<ul>
+<li>成本收益：存储(5PB+)、网络</li>
+<li>最后一公里：链路追踪无法定位问题</li>
+</ul>
+</li>
+<li><p>探针管理</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127154657-7c2eyh2.png"></li>
+<li>pandora: classloader、双亲委派，类似于一个SDK</li>
+<li>无侵入，ARMS，基于pinpoint</li>
+</ul>
+</li>
+<li><p>成本收益</p>
+<ul>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155033-d6gzxx4.png"></p>
+</li>
+<li><p>5-30分钟内才是最有价值可能被用户使用的数据</p>
+</li>
+<li><p>冷热数据分离</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155211-k73knkw.png"></p>
+</li>
+<li><p>预聚合：客户端聚合，这样即使调用链采样发送，聚合的数据是准确的</p>
+</li>
+</ul>
+</li>
+<li><p>最后一公里</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155503-6933a4b.png"></li>
+<li>方法栈追踪，自动化</li>
+</ul>
+</li>
+<li><p>告警</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127155738-rj2lrwm.png"></li>
+</ul>
+</li>
+<li><p>扩展（赋能）</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160045-c5tulmo.png"></p>
+</li>
+<li><p>业务场景为中心的染色链路</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160118-z3zk6pe.png"></li>
+<li>类似后置采样，收集全部链路后再染色</li>
+</ul>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160359-hdjcakf.png"></p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160534-5a9iaot.png"></p>
+<ul>
+<li>RASP</li>
+</ul>
+</li>
+<li><p>趋势</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127160811-7eual9a.png"></p>
+</li>
+<li><p>注意右下角几个社区</p>
+</li>
+<li><p>全景监控</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127161144-0ti2pqb.png"></p>
+</li>
+<li><p>QA</p>
+</li>
+<li><p>方法栈追踪</p>
+<ul>
+<li><p>入的世界、出的时间，如果进来的时间大于1s，就启动一个线程去抓方法栈</p>
+</li>
+<li><p>1入，5出，抓2-5</p>
+</li>
+<li><p>如何低代价追踪，就是产品竞争力</p>
+</li>
+<li><p>注意那几个平台社区</p>
+</li>
+</ul>
+</li>
+<li><p>目前对Java插桩，go等不支持</p>
+</li>
+<li><p>数据预处理，客户端。数据热处理，边缘节点计算</p>
+</li>
+</ul>
+<h2 id="网易云原生日志平台的架构演进与实践（轻舟日志）"><a href="#网易云原生日志平台的架构演进与实践（轻舟日志）" class="headerlink" title="网易云原生日志平台的架构演进与实践（轻舟日志）"></a>网易云原生日志平台的架构演进与实践（轻舟日志）</h2><ul>
+<li><p>不是链路，更偏向日志</p>
+</li>
+<li><p>目录</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162004-lgf1447.png"></p>
+</li>
+<li><p>日志采集</p>
+</li>
+<li><p>sidecar</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162525-po0nv5n.png"></li>
+</ul>
+</li>
+<li><p>sidecat vs daemonSet</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162605-i77cg20.png"></li>
+</ul>
+</li>
+<li><p>实现：ripple+agent filebeat</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162702-yb6je32.png"></li>
+</ul>
+</li>
+<li><p>架构</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162826-hvezadg.png"></li>
+</ul>
+</li>
+<li><p>遇到的问题</p>
+</li>
+<li><p>总览</p>
+<ul>
+<li><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127162916-zttheal.png"></li>
+</ul>
+</li>
+<li><p>新版agent&#x2F;解决</p>
+</li>
+<li><p><img src="/2023/01/10/%E4%BC%81%E4%B8%9A%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7Meetup/image-20211127163757-ymcvrmx.png"></p>
+</li>
+<li><p>基于CRD和K8S的使用</p>
+</li>
+</ul>
+<h2 id="eBay-云原生生产环境下的日志监控"><a href="#eBay-云原生生产环境下的日志监控" class="headerlink" title="eBay 云原生生产环境下的日志监控"></a>eBay 云原生生产环境下的日志监控</h2><ul>
+<li>云原生环境下的日志系统</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>企业基础架构可观测性Meetup</p><p><a href="https://www.fireknight.tech/2023/01/10/企业基础架构可观测性Meetup/">https://www.fireknight.tech/2023/01/10/企业基础架构可观测性Meetup/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>FireKnight</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-10</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/">可观测性</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay_pay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechat_pay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/01/10/Serverless%E5%89%8D%E6%B2%BF%E5%88%9B%E6%96%B0%E6%8A%80%E6%9C%AF/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Serverless前沿创新技术</span></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "01254188aaf09ec5df9666d45d7da572",
+            repo: "Fire-Knight.github.io",
+            owner: "Fire-Knight",
+            clientID: "9d590463f9824e731baf",
+            clientSecret: "cd67a9950f548a96891437f8f078e08fe05e8d1a",
+            admin: ["Fire-Knight"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/logo.png" alt="FireKnight"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">FireKnight</p><p class="is-size-6 is-block">系统开发工程师</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">28</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">14</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Fire-Knight" target="_blank" rel="noopener"><i class="fab fa-github"></i>    关注我</a></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Fuzzing/"><span class="tag">Fuzzing</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Istio/"><span class="tag">Istio</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Profiling/"><span class="tag">Profiling</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/REST-API/"><span class="tag">REST API</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Serverless/"><span class="tag">Serverless</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/"><span class="tag">云原生</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><span class="tag">可观测性</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="tag">微服务</span><span class="tag">24</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><span class="tag">性能分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%85%E9%9A%9C%E5%88%86%E6%9E%90/"><span class="tag">故障分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/"><span class="tag">智能运维</span><span class="tag">19</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95/"><span class="tag">测试</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90/"><span class="tag">测试生成</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#目录"><span class="level-left"><span class="level-item">1</span><span class="level-item">目录</span></span></a></li><li><a class="level is-mobile" href="#从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件"><span class="level-left"><span class="level-item">2</span><span class="level-item">从可观测性与可交互性视角出发——探讨如何设计出好用的基础软件</span></span></a></li><li><a class="level is-mobile" href="#分布式链路追踪在字节跳动的实践"><span class="level-left"><span class="level-item">3</span><span class="level-item">分布式链路追踪在字节跳动的实践</span></span></a></li><li><a class="level is-mobile" href="#阿里十年链路追踪与应用可观测实践"><span class="level-left"><span class="level-item">4</span><span class="level-item">阿里十年链路追踪与应用可观测实践</span></span></a></li><li><a class="level is-mobile" href="#网易云原生日志平台的架构演进与实践（轻舟日志）"><span class="level-left"><span class="level-item">5</span><span class="level-item">网易云原生日志平台的架构演进与实践（轻舟日志）</span></span></a></li><li><a class="level is-mobile" href="#eBay-云原生生产环境下的日志监控"><span class="level-left"><span class="level-item">6</span><span class="level-item">eBay 云原生生产环境下的日志监控</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a><p class="is-size-7"><span>&copy; 2023 FireKnight</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

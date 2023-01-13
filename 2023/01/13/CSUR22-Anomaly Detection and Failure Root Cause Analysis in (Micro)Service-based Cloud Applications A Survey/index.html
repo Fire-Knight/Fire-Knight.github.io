@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey - FireKnight的站点</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="FireKnight的小站"><meta name="msapplication-TileImage" content="/img/logo-circle.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FireKnight的小站"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="故障检测和根因定位的综述，做微服务智能运维怎么能少了这篇！看完就知道当前业内方法及现状"><meta property="og:type" content="blog"><meta property="og:title" content="FireKnight的站点"><meta property="og:url" content="https://fire-knight.github.io/"><meta property="og:site_name" content="FireKnight的站点"><meta property="og:description" content="故障检测和根因定位的综述，做微服务智能运维怎么能少了这篇！看完就知道当前业内方法及现状"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fire-knight.github.io/images/CSUR22-Survey-cover.jpg"><meta property="article:published_time" content="2023-01-13T17:08:14.000Z"><meta property="article:modified_time" content="2023-01-13T10:30:14.000Z"><meta property="article:author" content="FireKnight"><meta property="article:tag" content="微服务"><meta property="article:tag" content="智能运维"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fire-knight.github.io/images/CSUR22-Survey-cover.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.fireknight.tech/2023/01/13/CSUR22-Anomaly%20Detection%20and%20Failure%20Root%20Cause%20Analysis%20in%20(Micro)Service-based%20Cloud%20Applications%20A%20Survey/"},"headline":"CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey","image":["https://www.fireknight.tech/images/CSUR22-Survey-cover.jpg"],"datePublished":"2023-01-13T17:08:14.000Z","dateModified":"2023-01-13T10:30:14.000Z","author":{"@type":"Person","name":"FireKnight"},"publisher":{"@type":"Organization","name":"FireKnight的站点","logo":{"@type":"ImageObject","url":"https://www.fireknight.tech/img/logo-circle.png"}},"description":"故障检测和根因定位的综述，做微服务智能运维怎么能少了这篇！看完就知道当前业内方法及现状"}</script><link rel="canonical" href="https://www.fireknight.tech/2023/01/13/CSUR22-Anomaly%20Detection%20and%20Failure%20Root%20Cause%20Analysis%20in%20(Micro)Service-based%20Cloud%20Applications%20A%20Survey/"><link rel="icon" href="/img/logo-circle.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b07854b0ea8131112fa25a15e6328af7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Fire-Knight"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/images/CSUR22-Survey-cover.jpg" alt="CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-13T17:08:14.000Z" title="1/13/2023, 5:08:14 PM">2023-01-13</time>发表</span><span class="level-item"><time dateTime="2023-01-13T10:30:14.000Z" title="1/13/2023, 10:30:14 AM">2023-01-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">微服务智能运维</a></span><span class="level-item">19 分钟读完 (大约2793个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey</h1><div class="content"><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>故障检测和根因定位的综述</li>
+<li>当前的异常检测技术，都需要一个baseline去构建预知识。当线上执行差距过大（并发压力、环境、基础测试集构建错误等），会造成检测不准确</li>
+<li>根因定位技术：各有千秋。基于拓扑的、概率&#x2F;格兰杰假设的貌似会找出更多相关或者更接近根本的问题，相比基于trace比较的</li>
+</ul>
+<!-- more -->
+
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><ul>
+<li><p>检测故障和识别可能的根本原因，对于迅速恢复和修复应用程序至关重要</p>
+</li>
+<li><p>对现代多业务应用中当前可用的<strong>异常检测</strong>和<strong>根本原因分析技术</strong>进行结构化概述和定性分析</p>
+</li>
+<li><p>本论文结构为</p>
+<ul>
+<li><p>异常检测技术</p>
+<ul>
+<li>基于log的异常检测</li>
+<li>基于分布式trace的异常检测</li>
+<li>基于监控数据的异常检测</li>
+</ul>
+</li>
+<li><p>根因分析技术</p>
+<ul>
+<li>基于log的</li>
+<li>基于trace的</li>
+<li>基于监控数据的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><ul>
+<li>向微服务松耦合变化</li>
+<li>但是难以区分单独故障还是级联故障(多个服务jiaohu)，难以检测和理解故障</li>
+<li>目前异常检测(发现)和根因定位互相剥离，观察是否有相辅相成的工具【但目前我看到的大多异常检测和根因定位一起做】</li>
+</ul>
+<h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><ul>
+<li>异常：服务响应时间变慢、吞吐降低or记录错误事件</li>
+<li>根因分析与调试技术的区别：根本原因分析技术只是分析应用程序运行时收集的信息(例如，日志或监控数据)，而不是在不同的条件下重新运行它【无关紧要的区别】</li>
+<li>监控内容：KPIs(关键性能指标), log, trace</li>
+</ul>
+<h1 id="异常检测"><a href="#异常检测" class="headerlink" title="异常检测"></a>异常检测</h1><ul>
+<li><img src="/2023/01/13/CSUR22-Anomaly%20Detection%20and%20Failure%20Root%20Cause%20Analysis%20in%20(Micro)Service-based%20Cloud%20Applications%20A%20Survey/image-20220510160329-nk6yhpe.png"><!--  --></li>
+</ul>
+<h2 id="基于log的异常检测"><a href="#基于log的异常检测" class="headerlink" title="基于log的异常检测"></a>基于log的异常检测</h2><ul>
+<li><p>无监督学习baseline，在线分析log是否与baseline是否相同</p>
+</li>
+<li><p>OASIS [58]:</p>
+<ul>
+<li>先运行一个无错误的应用，提取log，挖掘一个控制流图，对正常条件下的基线应用行为进行建模。内含：应该由哪个服务记录哪些事件，记录的顺序是什么</li>
+<li>然后，通过将新生成的日志映射到相应的模板，并检查到达的日志模板是否符合控制流图，实现在线异常检测。如果在相应的时间延迟中没有记录应该遵循模板的模板，或者遵循给定模板的模板的实际速率明显偏离预期的分支概率，那么OASIS认为应用程序受到了功能异常的影响。</li>
+</ul>
+</li>
+<li><p>LogSed [34]:</p>
+<ul>
+<li>时间加权流程图</li>
+</ul>
+</li>
+<li><p>总结：</p>
+<ul>
+<li>共同假设：类似的事件会有类似的log。</li>
+<li>但实际上服务是动态的，可能导致检测假阳性&#x2F;假阴性</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于分布式追踪数据的异常检测"><a href="#基于分布式追踪数据的异常检测" class="headerlink" title="基于分布式追踪数据的异常检测"></a>基于分布式追踪数据的异常检测</h2><ul>
+<li><p>trace获取 + （无监督&#x2F;监督机器学习 | trace比较技术）</p>
+</li>
+<li><p>常见的假设是，应用程序在训练运行中产生的轨迹与运行时产生的轨迹是一致的，因此提供了一个基线，用来比较新产生的轨迹。</p>
+</li>
+<li><p>无监督机器学习</p>
+<ul>
+<li>在生产前训练无监督网络，侦测生产过程中的问题</li>
+<li>TraceAnomaly [45]: 如果有新数据，则检查白名单，再给出阈值表示是否异常</li>
+<li>Nedelkoski [61]: LSTM</li>
+</ul>
+</li>
+<li><p>监督学习</p>
+<ul>
+<li>标记+训练+判断</li>
+<li>MEPFL: 复旦WisdomCode团队工作 ((20220330164333-6snty44 ‘WisdomCode-MEPFL-基于日志学习的错误预测与故障定位’))</li>
+</ul>
+</li>
+<li><p>trace对比技术</p>
+<ul>
+<li>trace相似度比较。收集多服务应用程序中可能出现的轨迹，然后检查新收集的轨迹是否与已收集的轨迹相似。</li>
+<li>缺点：应用程序继续与以前的运行保持一致的情况下再次进行的，以前收集的跟踪提供了一个基线，用于比较新收集的跟踪。因此，当应用程序的运行时条件与收集基线轨迹时不同时，制定的异常检测的准确性可能会降低。</li>
+<li>Meng et al. [54] and Wang et al. [88]：预生成trace调用树 -&gt; 新trace计算编辑距离，如歌超过阈值，则异常; 预生成响应时间矩阵 -&gt; 主成分分析。 缺点：计算复杂度</li>
+<li>Chen et al. [17]: 使用fast matrix sketching algorithm做异常检测，优点：快</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于监控信息的异常检测"><a href="#基于监控信息的异常检测" class="headerlink" title="基于监控信息的异常检测"></a>基于监控信息的异常检测</h2><ul>
+<li><p>需要在无错误模式训练，然后在生产环境中定位问题。当应用程序运行时条件有所不同,检测的准确性可能减少,例如:由于高负荷由最终用户请求的山峰,或者由于新服务部署到取代过时的</p>
+</li>
+<li><p>监控数据</p>
+<ul>
+<li>SLI，全名Service Level Indicator，是服务等级指标的简称，它是衡定系统稳定性的指标。一个常见的SLI是请求得到正常响应的百分比。</li>
+<li>SLO，全名Sevice Level Objective，是服务等级目标的简称，也是稳定性目标,是围绕SLI构建的目标, 比如，月度、季度、年度等。</li>
+</ul>
+</li>
+<li><p>无监督学习</p>
+<ul>
+<li><p>学习他们行为的基线模型。然后使用基线模型在线检测服务上新监控的kpi是否偏离基线模型</p>
+</li>
+<li><p>MicroRCA[92]:并不算无监督，相当于图建模 ((20220510163942-ddm9aru ‘NOMS20-MicroRCA-Root Cause Localization of Performance Issues in…’))</p>
+</li>
+<li><p>CloudRanger[87]: </p>
+<ul>
+<li>应用程序的前端服务上实施持续学习，以根据监控的响应时间、负载和吞吐量，了解当前条件下的预期响应时间。</li>
+<li>基于历史初始模型的脱机训练</li>
+<li>当应用程序运行时，CloudRanger对监控的kpi应用多项式回归来更新基线模型，以反映应用程序在动态变化的运行时条件下的行为。</li>
+<li>然后，根据给定的容错阈值，通过检查应用程序前端的响应时间是否明显偏离预期时间来实施在线异常检测。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>监督学习</p>
+<ul>
+<li>正常运行、注入特定的故障，生成训练集</li>
+</ul>
+</li>
+<li><p>SLO检测</p>
+<ul>
+<li>ϵ-diagnosis [76]: 注重尾延迟</li>
+</ul>
+</li>
+<li><p>Heartbeating</p>
+</li>
+</ul>
+<h1 id="根因定位"><a href="#根因定位" class="headerlink" title="根因定位"></a>根因定位</h1><ul>
+<li><p><img src="/2023/01/13/CSUR22-Anomaly%20Detection%20and%20Failure%20Root%20Cause%20Analysis%20in%20(Micro)Service-based%20Cloud%20Applications%20A%20Survey/image-20220510165411-5q4nta9.png"></p>
+<h2 id="基于log的根因定位"><a href="#基于log的根因定位" class="headerlink" title="基于log的根因定位"></a>基于log的根因定位</h2><ul>
+<li><p>建模，then确认异常</p>
+</li>
+<li><p>Aggarwal et al. [1]: </p>
+<ul>
+<li>因果关系图的顶点对应用程序服务进行建模，而因果关系图的有向弧则对源服务中的异常可能导致目标服务中的异常进行建模;</li>
+<li>时间序列建模，计算格兰杰因果关系，确定错误记录之间的因果性</li>
+<li>随机游走确定根因</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于trace的根因定位"><a href="#基于trace的根因定位" class="headerlink" title="基于trace的根因定位"></a>基于trace的根因定位</h2><ul>
+<li><p>方法：①可视化 ②统计分析 ③拓扑分析</p>
+</li>
+<li><p>可视化</p>
+<ul>
+<li>Zhou et al. [98]: ((20211126002021-vogdt0p ‘ITSE21-Fault Analysis and Debugging of Microservice Systems: Ind…’))</li>
+</ul>
+</li>
+<li><p>统计分析</p>
+<ul>
+<li>CloudDiag [56]: 变异系数, 阈值判断。基于主成分分析处理</li>
+<li>TraceAnomaly [45]: 神经网络，根据执行时间，把trace分为正常异常。每个响应时间与平均响应时间有显著偏差的服务交互都被认为是异常的</li>
+</ul>
+</li>
+<li><p>基于图</p>
+<ul>
+<li>MonitorRank [38]: 基于图的随机游走</li>
+<li>MicroHECL [44]： BFS, 找到异常, 用某种方法遍历所有节点，看节点传播能否到达异常</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于监控数据的根因定位"><a href="#基于监控数据的根因定位" class="headerlink" title="基于监控数据的根因定位"></a>基于监控数据的根因定位</h2><ul>
+<li><p>大多数基于监视的根本原因分析技术都依赖相关性作为驱动因素，以识别所观察到的异常的可能根本原因。其思想是，在异常服务上监控的kpi与在其他服务上并行监控的kpi之间的相关性越高，后者导致在前者上观察到的异常的可能性就越大</p>
+</li>
+<li><p>然而，考虑到相关性并不能确保因果关系，服务中观察到的异常的实际根本原因可能不在其监控kpi与异常服务高度相关的服务中，而在其他服务中。因此，伪相关性会影响利用KPI相关性进行统计分析或驱动拓扑&#x2F;因果关系图中查找根本原因的技术。这增加了假阴性的风险，通常通过返回多个可能值来解决次问题</p>
+</li>
+<li><p>统计分析</p>
+<ul>
+<li>Wang et al. [86]: 通过识别其监控kpi与检测到的异常同时异常的应用程序服务，可以确定服务上检测到的异常的根本原因</li>
+<li>PAL [63]: CUSUM(累积和)图度量监视的KPI值的变化幅度，包括监视值的原始序列和自举序列，而自举序列是对所监视的KPI值进行随机排序的排列。如果原始序列的变化幅度高于大多数bootstrap，则认为原始序列是异常的，并根据其CUSUM图确定异常开始的时间。减少误报：为了减少误报，PAL和FChain检查异常是否影响了所有应用程序服务，在这种情况下，异常被归类为外部原因(如工作负载峰值)。相反，如果只有应用程序服务的子集异常，则认为它们是前端异常的可能根源，并按照异常开始时间的顺序返回它们。错误定位：最早的异常确实被认为是最有可能的根本原因，因为它们可能已经从相应的服务传播到其他服务，直到导致观测到的前端异常。</li>
+</ul>
+</li>
+<li><p>基于图的分析</p>
+<ul>
+<li>randomwalk：MicroRCA</li>
+<li>其他方法，格兰杰因果测试等</li>
+</ul>
+</li>
+<li><p>因果关系图分析</p>
+<ul>
+<li>PC-algorithm</li>
+<li>BFS</li>
+<li>Random Walk</li>
+</ul>
+</li>
+<li><p>原理总结</p>
+<ul>
+<li><p>因果图中的顶点要么为应用程序[18,19,24,42,43,48,50,87]建模，要么为这些服务上监视的KPI[51, 55, 68]建模，而每个弧线表示目标服务&#x2F;KPI的性能取决于源服务&#x2F;KPI的性能。</p>
+</li>
+<li><p>因果关系图总是通过对日志事件&#x2F;监控kpi的时间序列应用pc -算法[82]来获得(但对于LOUD[51])，因为已知该算法允许确定时间序列中的因果关系，即:通过确定一个时间序列中的值是否可以用来预测另一个时间序列的值</p>
+</li>
+<li><p>搜索方法：从异常节点(服务&#x2F;kpi)出发，BFS或者Random Walk</p>
+<ul>
+<li>randomwalk: 访问具有随机步长服务的概率与该服务的性能与观察到异常的服务之间的相关性成正比</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h1><ul>
+<li><p>成本</p>
+</li>
+<li><p>精度</p>
+<ul>
+<li><p>假阳性解决方法</p>
+<ul>
+<li>基线模型：不断训练新的模型</li>
+<li>trace解决方法：将新观察到的信息和之前的所有信息进行比较</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>可解释性和对策</p>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey</p><p><a href="https://www.fireknight.tech/2023/01/13/CSUR22-Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey/">https://www.fireknight.tech/2023/01/13/CSUR22-Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>FireKnight</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-13</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/">智能运维</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay_pay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechat_pay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/"><span class="level-item">FSE20-Intelligent REST API Data Fuzzing</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "0f2be63aa80cbe00929cceac2b2a517f",
+            repo: "Fire-Knight.github.io",
+            owner: "Fire-Knight",
+            clientID: "9d590463f9824e731baf",
+            clientSecret: "cd67a9950f548a96891437f8f078e08fe05e8d1a",
+            admin: ["Fire-Knight"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/logo.png" alt="FireKnight"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">FireKnight</p><p class="is-size-6 is-block">系统开发工程师</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">28</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">14</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Fire-Knight" target="_blank" rel="noopener"><i class="fab fa-github"></i>    关注我</a></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Fuzzing/"><span class="tag">Fuzzing</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Istio/"><span class="tag">Istio</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Profiling/"><span class="tag">Profiling</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/REST-API/"><span class="tag">REST API</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Serverless/"><span class="tag">Serverless</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/"><span class="tag">云原生</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><span class="tag">可观测性</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="tag">微服务</span><span class="tag">24</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><span class="tag">性能分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%85%E9%9A%9C%E5%88%86%E6%9E%90/"><span class="tag">故障分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/"><span class="tag">智能运维</span><span class="tag">19</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95/"><span class="tag">测试</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90/"><span class="tag">测试生成</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">1</span><span class="level-item">总结</span></span></a></li><li><a class="level is-mobile" href="#摘要"><span class="level-left"><span class="level-item">2</span><span class="level-item">摘要</span></span></a></li><li><a class="level is-mobile" href="#Intro"><span class="level-left"><span class="level-item">3</span><span class="level-item">Intro</span></span></a></li><li><a class="level is-mobile" href="#术语"><span class="level-left"><span class="level-item">4</span><span class="level-item">术语</span></span></a></li><li><a class="level is-mobile" href="#异常检测"><span class="level-left"><span class="level-item">5</span><span class="level-item">异常检测</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#基于log的异常检测"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">基于log的异常检测</span></span></a></li><li><a class="level is-mobile" href="#基于分布式追踪数据的异常检测"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">基于分布式追踪数据的异常检测</span></span></a></li><li><a class="level is-mobile" href="#基于监控信息的异常检测"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">基于监控信息的异常检测</span></span></a></li></ul></li><li><a class="level is-mobile" href="#根因定位"><span class="level-left"><span class="level-item">6</span><span class="level-item">根因定位</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#基于log的根因定位"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">基于log的根因定位</span></span></a></li><li><a class="level is-mobile" href="#基于trace的根因定位"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">基于trace的根因定位</span></span></a></li><li><a class="level is-mobile" href="#基于监控数据的根因定位"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">基于监控数据的根因定位</span></span></a></li></ul></li><li><a class="level is-mobile" href="#讨论"><span class="level-left"><span class="level-item">7</span><span class="level-item">讨论</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a><p class="is-size-7"><span>&copy; 2023 FireKnight</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

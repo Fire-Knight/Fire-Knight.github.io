@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>FSE20-Intelligent REST API Data Fuzzing - FireKnight的站点</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="FireKnight的小站"><meta name="msapplication-TileImage" content="/img/logo-circle.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FireKnight的小站"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="通过对swagger、REST API响应的分析，智能地生成嵌入在REST API请求中的数据负载，从而发现error；微软的研究，有工具可用"><meta property="og:type" content="blog"><meta property="og:title" content="FireKnight的站点"><meta property="og:url" content="https://fire-knight.github.io/"><meta property="og:site_name" content="FireKnight的站点"><meta property="og:description" content="通过对swagger、REST API响应的分析，智能地生成嵌入在REST API请求中的数据负载，从而发现error；微软的研究，有工具可用"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://fire-knight.github.io/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/image-20211202211920-e9p52ps-20220214101124-hzqkjbl.png"><meta property="article:published_time" content="2023-01-12T21:25:41.000Z"><meta property="article:modified_time" content="2023-01-12T21:25:41.000Z"><meta property="article:author" content="FireKnight"><meta property="article:tag" content="Fuzzing"><meta property="article:tag" content="REST API"><meta property="article:tag" content="测试"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://fire-knight.github.io/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/image-20211202211920-e9p52ps-20220214101124-hzqkjbl.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.fireknight.tech/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/"},"headline":"FSE20-Intelligent REST API Data Fuzzing","image":["https://www.fireknight.tech/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/image-20211202211920-e9p52ps-20220214101124-hzqkjbl.png"],"datePublished":"2023-01-12T21:25:41.000Z","dateModified":"2023-01-12T21:25:41.000Z","author":{"@type":"Person","name":"FireKnight"},"publisher":{"@type":"Organization","name":"FireKnight的站点","logo":{"@type":"ImageObject","url":"https://www.fireknight.tech/img/logo-circle.png"}},"description":"通过对swagger、REST API响应的分析，智能地生成嵌入在REST API请求中的数据负载，从而发现error；微软的研究，有工具可用"}</script><link rel="canonical" href="https://www.fireknight.tech/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/"><link rel="icon" href="/img/logo-circle.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b07854b0ea8131112fa25a15e6328af7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Fire-Knight"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-01-12T21:25:41.000Z" title="1/12/2023, 9:25:41 PM">2023-01-12</time>发表</span><span class="level-item"><time dateTime="2023-01-12T21:25:41.000Z" title="1/12/2023, 9:25:41 PM">2023-01-12</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">论文笔记</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/REST-API-Fuzzing/">REST API Fuzzing</a></span><span class="level-item">5 分钟读完 (大约762个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">FSE20-Intelligent REST API Data Fuzzing</h1><div class="content"><h2 id="要点：fuzzing，REST-API，测试"><a href="#要点：fuzzing，REST-API，测试" class="headerlink" title="要点：fuzzing，REST API，测试"></a>要点：fuzzing，REST API，测试</h2><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>智能地生成嵌入在REST API请求中的数据负载</p>
+</li>
+<li><p>生成方法</p>
+</li>
+<li><ol>
+<li>schema fuzzing规则</li>
+<li>fuzzing 规则的组合方法</li>
+<li>搜索方法（对请求body每个值fuzzing的顺序）</li>
+<li>从swagger、响应、example中提取数据值</li>
+</ol>
+</li>
+<li><p>评估标准：某种fuzzing方法能出发error的类型数量，数量越多，越有效</p>
+</li>
+</ul>
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><ul>
+<li><blockquote>
+<p>fuzzing: automatic test generation and execution with the goal of finding security vulnerabilities.</p>
+</blockquote>
+</li>
+<li>目的：评估多种fuzzing技术(对rest api请求的fuzzing)</li>
+</ul>
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><ul>
+<li>这篇文章研究了如何fuzzing有状态的rest API, (尤其相对于RESTler而言）。通过智能fuzzing，生成更复杂的数据，找到更多的服务器错误</li>
+</ul>
+<h2 id="Schema-Fuzzing-最基本的表单fuzzing"><a href="#Schema-Fuzzing-最基本的表单fuzzing" class="headerlink" title="Schema Fuzzing - 最基本的表单fuzzing"></a>Schema Fuzzing - 最基本的表单fuzzing</h2><ul>
+<li><p>fuzzing规则 – 对请求body tree的fuzzing</p>
+</li>
+<li><p>Node fuzzing rules</p>
+<ul>
+<li>Drop</li>
+<li>Select</li>
+<li>Duplicate</li>
+<li>Type</li>
+</ul>
+</li>
+<li><p>Tree fuzzing 规则</p>
+<ul>
+<li>single: fuzzing一个节点</li>
+<li>path：选一条路径fuzzing</li>
+<li>all</li>
+</ul>
+</li>
+<li><p>实验</p>
+</li>
+<li><p>实验评估</p>
+<ul>
+<li><p>错误信息</p>
+</li>
+<li><p>error code</p>
+</li>
+<li><p>error message</p>
+</li>
+<li><p>error type &#x3D; code+message</p>
+</li>
+</ul>
+</li>
+<li><p>实验设置</p>
+<ul>
+<li>实验了以上12种组合，4个node*3个tree规则</li>
+<li><strong>每条请求有最多1000个fuzzing点</strong> | <strong>一个请求最多fuzzing 1000次</strong></li>
+</ul>
+</li>
+<li><p>结果</p>
+</li>
+<li><p><img src="/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/image-20211202211920-e9p52ps-20220214101124-hzqkjbl.png"></p>
+</li>
+<li><p>对于 drop和select而言，path比随机更好，随机会空间爆炸，path效率更高</p>
+</li>
+<li><p>type和duplicate都可能引起反序列化错误</p>
+</li>
+<li><p>每种fuzzing都有自己发现的独有错误</p>
+</li>
+<li><p>path最合适来fuzzing，不引入反序列化错误且有效率</p>
+</li>
+</ul>
+<h2 id="Combining-Schema-Fuzzing-Rules-–-fuzzing结合规则"><a href="#Combining-Schema-Fuzzing-Rules-–-fuzzing结合规则" class="headerlink" title="Combining Schema Fuzzing Rules – fuzzing结合规则"></a>Combining Schema Fuzzing Rules – fuzzing结合规则</h2><ul>
+<li><p>基本规则</p>
+</li>
+<li><p>依次使用drop、select、duplicate、type对tree节点依次fuzzing，drop出结果后，再使用select对结果fuzzing，…</p>
+</li>
+<li><p>组合：四选二、四选三、四选四</p>
+</li>
+<li><p>fuzzing次序</p>
+</li>
+<li><p>BFS</p>
+</li>
+<li><p>DFS</p>
+</li>
+<li><p>Random</p>
+</li>
+<li><p>结论</p>
+</li>
+<li><p>drop、select、type结合是很有效的，尤其是drop、select在type前fuzzing</p>
+</li>
+<li><p>duplicate没什么用</p>
+</li>
+<li><p>RD最有效</p>
+</li>
+</ul>
+<h2 id="Data-Value-Rendering-根据数据值fuzzing"><a href="#Data-Value-Rendering-根据数据值fuzzing" class="headerlink" title="Data Value Rendering - 根据数据值fuzzing"></a>Data Value Rendering - 根据数据值fuzzing</h2><ul>
+<li><p>当前challenges：无效值会被拒绝，例如global却填入europ</p>
+</li>
+<li><p>缺少客户端信息，例如ID、group name</p>
+</li>
+<li><p>缺少domain信息，例如local、global字段或者时间</p>
+</li>
+<li><p>缺少运行时依赖信息，后一个请求依赖于前一个</p>
+</li>
+<li><p>信息来源（rendering策略）</p>
+</li>
+<li><p>静态 type-value 字典</p>
+</li>
+<li><p><strong>从swagger提取的样例</strong></p>
+</li>
+<li><p><strong>从响应中匹配字段</strong></p>
+<ul>
+<li>两种匹配策略：conservative（父节点和当前节点类型相同），aggressive（当前节点类型相同）</li>
+</ul>
+</li>
+<li><p>render策略</p>
+</li>
+<li><p>Baseline <strong>(<strong>BAS</strong>)</strong>: 字典中选择</p>
+</li>
+<li><p>Examples only (EXM): example选择，然后字典选择</p>
+</li>
+<li><p>Responses only (conservative) (CON):保守模式选择，然后字典选择</p>
+</li>
+<li><p>Responses only (aggressive) (AGG)：aggressive选择，然后…</p>
+</li>
+<li><p>Responses (conservative) and examples (CON+EXM)</p>
+</li>
+<li><p>Responses (aggressive) and examples (AGG+EXM)</p>
+</li>
+<li><p>结论</p>
+</li>
+<li><p>swagger样例能带来更多的错误类型覆盖</p>
+</li>
+<li><p>为叶子结点使用响应值fuzzing可以显著提高效果，尤其是激进模式</p>
+</li>
+</ul>
+<h2 id="BUG-HUNTING-IN-CLOUD-SERVICES-对云服务器的实验"><a href="#BUG-HUNTING-IN-CLOUD-SERVICES-对云服务器的实验" class="headerlink" title="BUG HUNTING IN CLOUD SERVICES - 对云服务器的实验"></a>BUG HUNTING IN CLOUD SERVICES - 对云服务器的实验</h2><ul>
+<li><p>实验参数设置</p>
+</li>
+<li><blockquote>
+<p>Each phase has a budget of 10 times the number of nodes in the schema</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2></div><div class="article-licensing box"><div class="licensing-title"><p>FSE20-Intelligent REST API Data Fuzzing</p><p><a href="https://www.fireknight.tech/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/">https://www.fireknight.tech/2023/01/12/FSE20-Intelligent-REST-API-Data-Fuzzing/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>FireKnight</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-01-12</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Fuzzing/">Fuzzing</a><a class="link-muted mr-2" rel="tag" href="/tags/REST-API/">REST API</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%B5%8B%E8%AF%95/">测试</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay_pay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechat_pay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/01/13/CSUR22-Anomaly%20Detection%20and%20Failure%20Root%20Cause%20Analysis%20in%20(Micro)Service-based%20Cloud%20Applications%20A%20Survey/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/01/12/ICSE19-RESTler-Stateful-REST-API-Fuzzing/"><span class="level-item">ICSE19-RESTler Stateful REST API Fuzzing</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "df236c7a7525bfe2bb4a06c13f77eb5d",
+            repo: "Fire-Knight.github.io",
+            owner: "Fire-Knight",
+            clientID: "9d590463f9824e731baf",
+            clientSecret: "cd67a9950f548a96891437f8f078e08fe05e8d1a",
+            admin: ["Fire-Knight"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/logo.png" alt="FireKnight"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">FireKnight</p><p class="is-size-6 is-block">系统开发工程师</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>北京</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">28</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">14</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Fire-Knight" target="_blank" rel="noopener"><i class="fab fa-github"></i>    关注我</a></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Fuzzing/"><span class="tag">Fuzzing</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Istio/"><span class="tag">Istio</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Profiling/"><span class="tag">Profiling</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/REST-API/"><span class="tag">REST API</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Serverless/"><span class="tag">Serverless</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/eBPF/"><span class="tag">eBPF</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/"><span class="tag">云原生</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7/"><span class="tag">可观测性</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"><span class="tag">微服务</span><span class="tag">24</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><span class="tag">性能分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%85%E9%9A%9C%E5%88%86%E6%9E%90/"><span class="tag">故障分析</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%99%BA%E8%83%BD%E8%BF%90%E7%BB%B4/"><span class="tag">智能运维</span><span class="tag">19</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95/"><span class="tag">测试</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8B%E8%AF%95%E7%94%9F%E6%88%90/"><span class="tag">测试生成</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#要点：fuzzing，REST-API，测试"><span class="level-left"><span class="level-item">1</span><span class="level-item">要点：fuzzing，REST API，测试</span></span></a></li><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">2</span><span class="level-item">总结</span></span></a></li><li><a class="level is-mobile" href="#Intro"><span class="level-left"><span class="level-item">3</span><span class="level-item">Intro</span></span></a></li><li><a class="level is-mobile" href="#Background"><span class="level-left"><span class="level-item">4</span><span class="level-item">Background</span></span></a></li><li><a class="level is-mobile" href="#Schema-Fuzzing-最基本的表单fuzzing"><span class="level-left"><span class="level-item">5</span><span class="level-item">Schema Fuzzing - 最基本的表单fuzzing</span></span></a></li><li><a class="level is-mobile" href="#Combining-Schema-Fuzzing-Rules-–-fuzzing结合规则"><span class="level-left"><span class="level-item">6</span><span class="level-item">Combining Schema Fuzzing Rules – fuzzing结合规则</span></span></a></li><li><a class="level is-mobile" href="#Data-Value-Rendering-根据数据值fuzzing"><span class="level-left"><span class="level-item">7</span><span class="level-item">Data Value Rendering - 根据数据值fuzzing</span></span></a></li><li><a class="level is-mobile" href="#BUG-HUNTING-IN-CLOUD-SERVICES-对云服务器的实验"><span class="level-left"><span class="level-item">8</span><span class="level-item">BUG HUNTING IN CLOUD SERVICES - 对云服务器的实验</span></span></a></li><li><a class="level is-mobile" href="#相关工作"><span class="level-left"><span class="level-item">9</span><span class="level-item">相关工作</span></span></a></li><li><a class="level is-mobile" href="#讨论"><span class="level-left"><span class="level-item">10</span><span class="level-item">讨论</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo-circle.png" alt="FireKnight的站点" height="28"></a><p class="is-size-7"><span>&copy; 2023 FireKnight</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
