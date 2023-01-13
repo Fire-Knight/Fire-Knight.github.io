@@ -1,16 +1,17 @@
 ---
 title: CSUR22 - Anomaly Detection and Failure Root Cause Analysis in (Micro)Service-based Cloud Applications A Survey
-date: 2023-01-09 17:08:14
+date: 2023-01-13 17:08:14
 toc: true
-updated: 2023-01-10 10:30:14
+updated: 2023-01-13 10:30:14
 tags: 
 - 微服务
-- 性能分析
+- 智能运维
 categories:
 - 论文笔记
-- 微服务性能分析
+- 微服务智能运维
 cover: /images/CSUR22-Survey-cover.jpg
 # thumbnail: /images/CSUR22-Survey-cover.jpg
+excerpt: 故障检测和根因定位的综述，做微服务智能运维怎么能少了这篇！看完就知道当前业内方法及现状
 ---
 
 
