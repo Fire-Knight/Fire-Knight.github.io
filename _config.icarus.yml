@@ -168,7 +168,9 @@ widgets:
         position: right
         type: links
         links:
-            AAA: A.example.com
+            a_flying_fish: https://www.aflyingfish.top/
+            Tempest: https://blog.epicanecdotes.games/
+            Zexin Li: https://blog.zexinli.com/
     
     -
         position: left
